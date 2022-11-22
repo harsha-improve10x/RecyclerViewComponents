@@ -5,13 +5,19 @@ import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import android.os.Bundle;
+import android.widget.Toast;
 
 import com.example.recyclerviewcomponents.R;
 
 import java.util.ArrayList;
+import java.util.List;
+
+import retrofit2.Call;
+import retrofit2.Callback;
+import retrofit2.Response;
 
 public class SeriesActivity extends AppCompatActivity {
-    public ArrayList<Series> series;
+    public ArrayList<Series> series = new ArrayList<>();
     public SeriesAdapter seriesAdapter;
     public RecyclerView seriesRv;
 
@@ -20,8 +26,8 @@ public class SeriesActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_series);
         getSupportActionBar().setTitle("Series");
-        setDataSeries();
         setSeriesRv();
+        fetchData();
     }
 
     public void setSeriesRv() {
@@ -32,16 +38,21 @@ public class SeriesActivity extends AppCompatActivity {
         seriesRv.setAdapter(seriesAdapter);
     }
 
-    public void setDataSeries() {
-        series = new ArrayList<>();
-        Series kungFuPanda = new Series();
-        kungFuPanda.imageUrl = "https://occ-0-1556-1007.1.nflxso.net/dnm/api/v6/E8vDc_W8CLv7-yMQu8KMEC7Rrr8/AAAABduFRBhx6t-Dhqq_nz4teWtFQs7rpEnkYggmaKnJ1jjtbaGGqVSTZi1OfHu6DkmLzO7d5bXlhKYE1Eu6jrJoaO64l0uKJY2YEHJb.jpg?r=109";
-        kungFuPanda.title = "Kung Fu Panda Movie Series";
-        series.add(kungFuPanda);
+    public void fetchData() {
+        SeriesApi seriesApi = new SeriesApi();
+        SeriesService seriesService = seriesApi.createSeriesService();
+        Call<List<Series>>call = seriesService.fetchSeries();
+        call.enqueue(new Callback<List<Series>>() {
+            @Override
+            public void onResponse(Call<List<Series>> call, Response<List<Series>> response) {
+                List<Series> series = response.body();
+                seriesAdapter.setSeriesesData(series);
+            }
 
-        Series harryPotter = new Series();
-        harryPotter.imageUrl = "https://wallpapers.com/images/hd/harry-potter-it-all-ends-18u1rkvpzotfmi49-18u1rkvpzotfmi49.jpg";
-        harryPotter.title = "Harry Potter Movie Series";
-        series.add(harryPotter);
+            @Override
+            public void onFailure(Call<List<Series>> call, Throwable t) {
+                Toast.makeText(SeriesActivity.this, "failed to load Data", Toast.LENGTH_SHORT).show();
+            }
+        });
     }
 }

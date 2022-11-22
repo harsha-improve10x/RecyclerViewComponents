@@ -11,11 +11,12 @@ import com.example.recyclerviewcomponents.R;
 import com.squareup.picasso.Picasso;
 
 import java.util.ArrayList;
+import java.util.List;
 
 public class SeriesAdapter extends RecyclerView.Adapter<SeriesViewHolder> {
-    public ArrayList<Series> serieses;
+    public List<Series> serieses;
 
-    public void setSeriesesData(ArrayList<Series> seriesesList) {
+    public void setSeriesesData(List<Series> seriesesList) {
         serieses = seriesesList;
         notifyDataSetChanged();
     }

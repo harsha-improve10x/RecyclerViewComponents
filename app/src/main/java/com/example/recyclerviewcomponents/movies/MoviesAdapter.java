@@ -11,11 +11,12 @@ import com.example.recyclerviewcomponents.R;
 import com.squareup.picasso.Picasso;
 
 import java.util.ArrayList;
+import java.util.List;
 
 public class MoviesAdapter extends RecyclerView.Adapter<MoviesViewHolder> {
-    public ArrayList<Movies> movieses;
+    public List<Movies> movieses;
 
-    public void setMovieses(ArrayList<Movies> moviesesList) {
+    public void setMovieses(List<Movies> moviesesList) {
         movieses = moviesesList;
         notifyDataSetChanged();
     }
